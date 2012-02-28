@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Pie Chart</title>
+</head>
+<body>
+<canvas width="500" height="500" id="canvas"></canvas>
+<script>
+//initialize data set
+var data = [ 100, 68, 20, 30, 100 ];
+
+
+var canvas = document.getElementById('canvas');
+var c = canvas.getContext('2d');
+
+//draw background
+c.fillStyle = "white";
+c.fillRect(0,0,500,500);
+
+
+//a list of colors
+var colors = [ "orange","green","#999","yellow","teal"];
+
+//calculate total of all data
+var total = 0;
+for(var i=0; i<data.length; i++) {
+    total += data[i];
+}
+
+
+//draw pie data
+var prevAngle = 0;
+for(var i=0; i<data.length; i++) {
+    //fraction that this pieslice represents
+    var fraction = data[i]/total;
+    //calc starting angle
+    var angle = prevAngle + fraction*Math.PI*2;
+    
+    //draw the pie slice
+    //c.fillStyle = colors[i]; //choose color without gradient
+
+    //fill with a radial gradient
+    var grad = c.createRadialGradient( 250,250, 10, 250,250, 100);
+    grad.addColorStop(0,"#FFF");
+    grad.addColorStop(1,colors[i]);
+    c.fillStyle = grad;
+    
+    //create a path
+    c.beginPath();
+    c.moveTo(250,250);
+    c.arc(250,250, 100, prevAngle, angle, false);
+    c.lineTo(250,250);
+    
+    //fill it
+    c.fill();
+    
+    //stroke it
+    c.strokeStyle = "black";
+    c.stroke();
+    
+    //update for next time through the loop
+    prevAngle = angle;
+}
+
+//draw centered text
+c.fillStyle = "black";
+c.font = "24pt sans-serif";
+var text = "Sales Data from 2025";
+var metrics = c.measureText(text);
+c.fillText(text, 250-metrics.width/2, 400); //calculate width of text to center it
+
+
+
+
+</script>
+<!--I've never seen this tag down here before so i wanted to try it-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</body>
+</html>
